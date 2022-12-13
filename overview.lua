@@ -4,7 +4,7 @@
 --Variable types. Anything declared outside of functions or classes
 --are in the global scope of the file and quivilent to Java's static keyword
 int  x = 1                 --32bit Integer
-long y = 2147483647        --64bit Integer
+long y = 2147483648        --64bit Integer
 str test = "testing123"    --String (this would be a char* in C)
 bool enable = false        --Boolean value initialized to false
 
@@ -14,6 +14,7 @@ int[3] array = {0, 1, 2}   --Initialized array with len of 3
 --Variable operators
 x += 1           --Integer increment
 test += "456"    --String concat
+test[0]          --Strings can be treated as arrays
 enable = !enable --Invert boolean
 
 --Explicit void return function 
@@ -90,13 +91,16 @@ class Response(str s, int x) : Result
     int y = 5 --New members can also be defined in the top level class
 
     --Instance function getting the result of the parent class method
-    str getDataOther()
+    --Function names matching the parent will automatically override
+    str getData()
         --Returns the parent class result of getData() with the contact of the member s
-        return getData() + s
+        return super.getData() + s
     end
 end
 
 --@@ THE FOLLOWING ARE EXTRA WISHLIST STRETCH GOALS @@--
+
+define MAX_INT 2147483647 --Define constant globals. These are replaced with their raw value at compile time
 
 import gui --Import enitre source files
 import Widget from gui --Import specific classes or functions
@@ -139,7 +143,7 @@ bool state = true
 int val = state ? 1 : 0
 
 str msg => "hello"              --Shorthand function def with no arguments
-int area = int w, int h > w * h --Shorthand function def with arguments
+int area(int w, int h) => w * h --Shorthand function def with arguments
 
 --Defining an interface
 trait Message
@@ -173,18 +177,20 @@ end
 class Secret(pri:str password, pri:int salt)
     --Public member function returning private values
     --If members are private, they must be accessed via member functions
-    str get()
-        return password + salt
-    end
+    str get() => password + salt
+    str decode(int hash, int salt) => hash*salt
 end
 
 --Calling super classes with data from child
 class Parent(str s)
-    str getName()
-        return s
-    end
+    str getName() => s
 
     void update() --Void methods can omit the end if nothing is needed in the body
+end
+
+--Shorthand way of calling super method of the same name
+class Test() : Parent()
+    str getName() => @ + " name" --Calls super method with the same name
 end
 
 --Values a and b are passed via the super method to the parent
@@ -192,16 +198,12 @@ end
 class Child(str a, str b) : Parent()
     super(a + b)
 
-    str getName()
-        return super.getName()
-    end
+    str getName() => super.getName()
 end
 
 --Shorthand super value class passing
 class Child(str a, str b) : Parent(a + b)
-    str getName()
-        return super.getName()
-    end
+    str getName() => super.getName()
 end
 
 --Appending the required parent arguments for the child class
