@@ -54,12 +54,11 @@ end
 
 --@@ THE FOLLOWING IS THE INHERITANCE FEATURE SET STRETCH GOAL @@--
 
-Result result = Result()       --Instantiate class with omitted or empty constructor
-Result res()                   --Shorthand for instantiating a class
-res = Result()
+Result res = Result()       --Instantiate class with omitted or empty constructor
+Result res()                --Shorthand for instantiating a class
 
 Response res("Not Found", 404) --Instantiate class with constructor arguments
-print(res.s + res.x)           --Members can be accessed like
+print(res.s + res.x)           --Members can be accessed like lua
 
 --Type checking. This should print since res is an instance of Result
 if res is Result
@@ -79,7 +78,7 @@ end
 
 --Class inheritance and constructor with arguments
 --By default args will be added as members (much like data classes)
-class Response(str s, int x) extends Result
+class Response(str s, int x) : Result
     x = x * 2 --Argument members can be redefined
     int y = 5 --New members can also be defined in the top level class
 
@@ -91,6 +90,9 @@ class Response(str s, int x) extends Result
 end
 
 --@@ THE FOLLOWING ARE EXTRA WISHLIST STRETCH GOALS @@--
+
+import gui --Import enitre source files
+import Widget from gui --Import specific classes or functions
 
 int[..] list;              --Growing array (a list)
 list.add(5)                --Add value to the list
@@ -112,6 +114,17 @@ end
 for int i in 5..20:2
     print(i)
 end
+
+--For each loop (works with lists and arrays)
+for int i in list
+    print(i)
+end
+--Shorthand for each loop
+list.in(i > print(i)) --Requires non statically defining the type
+
+--Tenary operator
+bool state = true
+int val = state ? 1 : 0
 
 str msg => "hello"              --Shorthand function def with no arguments
 int area = int w, int h > w * h --Shorthand function def with arguments
@@ -162,7 +175,7 @@ end
 
 --Values a and b are passed via the super method to the parent
 --This value can then be accessed by the parents getName function
-class Child(str a, str b) extends Parent()
+class Child(str a, str b) : Parent()
     super(a + b)
 
     str getName()
@@ -171,8 +184,24 @@ class Child(str a, str b) extends Parent()
 end
 
 --Shorthand super value class passing
-class Child(str a, str b) extends Parent(a + b)
+class Child(str a, str b) : Parent(a + b)
     str getName()
         return super.getName()
     end
+end
+
+--Appending the required parent arguments for the child class
+--This allows ChildWithVars to omit (int x, int y, int w, int h)
+class ChildWithVars(str id) := ParentWithVars()
+
+end
+
+class ParentWithVars(int x, int y, int w, int h)
+
+end
+
+--This is transpiled to:
+class ChildWithVars(str id, int x, int y, int w, int h) : ParentWithVars()
+    super(x, y, w, h)
+    str id = ""
 end
