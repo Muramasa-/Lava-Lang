@@ -11,6 +11,11 @@ bool enable = false        --Boolean value initialized to false
 int[3] array               --Defined array with len of 3
 int[3] array = {0, 1, 2}   --Initialized array with len of 3
 
+--Variable operators
+x += 1           --Integer increment
+test += "456"    --String concat
+enable = !enable --Invert boolean
+
 --Explicit void return function 
 --The last statement is returned by default
 void update()
@@ -42,8 +47,10 @@ for int i in 20
 end
 
 --Simple while loop
+int x = 1
 while x < 10
     print(x)
+    x++
 end
 
 --Enum Token, replace keywords with the raw integer value
@@ -119,8 +126,13 @@ end
 for int i in list
     print(i)
 end
+
+--Shorthand conditional statement
+if x > 10 : print(0) : x > 5 : print(1) ; print(2)
+
 --Shorthand for each loop
 list.in(i > print(i)) --Requires non statically defining the type
+list.in(i > print(i) : print(i + 1)) --Multiple statements in shorthand statement
 
 --Tenary operator
 bool state = true
@@ -171,6 +183,8 @@ class Parent(str s)
     str getName()
         return s
     end
+
+    void update() --Void methods can omit the end if nothing is needed in the body
 end
 
 --Values a and b are passed via the super method to the parent
