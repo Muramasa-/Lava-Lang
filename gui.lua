@@ -6,9 +6,8 @@ Widget[..] widgets;
 
 --Define simple rect class
 class Rect(int x, int y, int w, int h)
-    bool inBounds(Rect r) --Check if one rect is inside another's bounds
-        return (x >= r.x) && (x < (r.x + r.w)) && (y >= r.y) && (y < (r.y + r.h))
-    end
+    --Check if one rect is inside another's bounds
+    bool inBounds = Rect r > (x >= r.x) && (x < (r.x + r.w)) && (y >= r.y) && (y < (r.y + r.h))
 end
 
 --Define base widget class inheriting from rect and passing params to it via super
@@ -16,11 +15,8 @@ end
 class Widget(int x, int y, int w, int h) := Rect() :: Interact
     color = color.Grey --Define new member color
     void init()
-        --//NO-OP
-    end
-    void draw() --Define draw method
-        drawRect(x, y, w, h, color) --Use drawRect from the imported draw lib
-    end
+    --Define draw method
+    void draw() => drawRect(x, y, w, h, color) --Use drawRect from the imported draw lib
 end
 
 --Define new interact trait with one void method
@@ -30,23 +26,21 @@ end
 
 --Define new widget class
 class Console(str id) := Widget() --Extending Widget: := denoting it requires and passes the params
-    void onHover(bool state) --Overriding the onHover method from the Interact trait
-        color = state ? color.LightGrey : color.Grey --Setting member with ternary operator
-    end
+    --Overriding the onHover method from the Interact trait
+    --Setting member with ternary operator
+    void onHover = bool state > color = state ? color.LightGrey : color.Grey
 end
 
 --Init method called only once
 void onInit()
     widgets += Widget(0, 0, 400, 400) --Instantiate standard widget
     widgets += Console("console.1", 0, 300, 100, 400) --Instantiate custom widget
-
     widgets.in(w > w.init()) --Init all widgets
 end
 
 --Update method called every frame
 void onUpdate()
-    for Widget w in widgets --Iterate over all Widget objects in list
-        w.onHover(mouse.r.inBounds(w.r)) --Call instance method (defined by trait) and passing value
-        w.draw() --Call instance method
-    end
+    --Iterate over all Widget objects in list
+    --Call instance method (defined by trait) and passing value
+    widgets.in(w > w.onHover(mouse.r.inBounds(w.r)); w.draw())
 end
